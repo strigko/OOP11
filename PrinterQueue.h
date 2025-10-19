@@ -1,15 +1,14 @@
 #pragma once
-
 template <typename T, typename P = int>
-class QueuePriority
+class PrinterQueue
 {
 	T* items;
 	P* priorityArray;
 	int maxSize;
 	int currentSize;
 public:
-	QueuePriority(int size);
-	~QueuePriority();
+	PrinterQueue(int size);
+	~PrinterQueue();
 
 	void Add(const T& item, const P& priority = 0);
 	T Extract();
@@ -17,8 +16,5 @@ public:
 	bool isEmpty();
 	bool isFull();
 	int getCount();
-	void Print();
+	void Print() const;
 };
-
-#include "QueuePriority.cpp"
-

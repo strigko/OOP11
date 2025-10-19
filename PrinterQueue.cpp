@@ -1,10 +1,10 @@
-#pragma once
-#include "QueuePriority.h"
+#include "PrinterQueue.h"
+#include "PrintStat.h"
 #include <iostream>
 using namespace std;
 
 template <typename T, typename P>
-QueuePriority<T,P>::QueuePriority(int size)
+PrinterQueue<T, P>::PrinterQueue(int size)
 {
 	maxSize = size;
 	currentSize = 0;
@@ -14,14 +14,14 @@ QueuePriority<T,P>::QueuePriority(int size)
 }
 
 template <typename T, typename P>
-QueuePriority<T,P>::~QueuePriority()
+PrinterQueue<T, P>::~PrinterQueue()
 {
 	delete[] priorityArray;
 	delete[] items;
 }
 
 template <typename T, typename P>
-void QueuePriority<T,P>::Add(const T& item, const P& priority)
+void PrinterQueue<T, P>::Add(const T& item, const P& priority)
 {
 	if (!isFull()) {
 		items[currentSize] = item;
@@ -31,7 +31,7 @@ void QueuePriority<T,P>::Add(const T& item, const P& priority)
 }
 
 template <typename T, typename P>
-T QueuePriority<T,P>::Extract()
+T PrinterQueue<T, P>::Extract()
 {
 	if (!isEmpty()) {
 		P maxPri = priorityArray[0];
@@ -46,45 +46,48 @@ T QueuePriority<T,P>::Extract()
 		for (int i = maxPriPos; i < currentSize - 1; i++) {
 			items[i] = items[i + 1];
 			priorityArray[i] = priorityArray[i + 1];
-		} 
+		}
 		currentSize--;
 		return item;
 	}
 }
 
 template <typename T, typename P>
-void QueuePriority<T,P>::Clear()
+void PrinterQueue<T, P>::Clear()
 {
 	currentSize = 0;
 	delete[] priorityArray;
-	priorityArray = new P[maxSize] {0};
+	priorityArray = new P[maxSize]{ 0 };
 }
 
 template <typename T, typename P>
-bool QueuePriority<T,P>::isEmpty()
+bool PrinterQueue<T, P>::isEmpty()
 {
 	return currentSize == 0;
 }
-
 template <typename T, typename P>
-bool QueuePriority<T, P>::isFull()
+bool PrinterQueue<T, P>::isFull()
 {
 	return currentSize == maxSize;
 }
 
 template <typename T, typename P>
-int QueuePriority<T, P>::getCount()
+int PrinterQueue<T, P>::getCount()
 {
 	return currentSize;
 }
 
 template <typename T, typename P>
-void QueuePriority<T, P>::Print()
+void PrinterQueue<T, P>::Print() const
 {
 	cout << "Current size: " << currentSize << endl;
 	cout << "(priority|item): " << endl;
 	for (int i = 0; i < currentSize; i++) {
+		const T& item = items[i];
 		cout << "(" << priorityArray[i] << "|" << items[i] << ")";
 		cout << endl;
 	}
 }
+
+template class PrinterQueue<std::string, int>;
+template class PrinterQueue<PrintStat, int>;
